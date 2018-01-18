@@ -24,6 +24,7 @@ class Login extends Component{
   render(){
     return (
         <div className="container">
+        <h3> lấy token tại <a href="https://developers.facebook.com/tools/explorer/" target="blank">ĐÂY!</a>  </h3>
         <div className="input-group">
             <input id="email" type="text" className="form-control" ref="access_token" placeholder="access_token"/>
             <div class="input-group-btn">
