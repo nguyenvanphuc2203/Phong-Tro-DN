@@ -34,7 +34,7 @@ class News extends Component {
         toastr.success(response.data.name,'Success 25 Friend !');
     })
     .catch((error) => {
-      toastr.error('Bạn chưa access token!');
+      toastr.error('You need login first!');
       console.log(error)
     });
     console.log(this.state.friendList);
