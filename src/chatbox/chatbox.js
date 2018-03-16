@@ -13,7 +13,7 @@ class ChatBox extends Component{
           ],
           message: ''
         }
-        this.socket = io('localhost:8080');
+        this.socket = io('https://phongtro-nodejs.herokuapp.com');
     
         this.socket.on('RECEIVE_MESSAGE', function(data){
             addMessage(data);
