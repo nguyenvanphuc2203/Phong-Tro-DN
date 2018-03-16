@@ -14,7 +14,7 @@ class FromChoThue extends Component {
   }
   postItem(){
     // post data to server node 
-    fetch('https://phongtro-nodejs.herokuapp.com/postitem', {
+    fetch('http://localhost:8080/postitem', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
