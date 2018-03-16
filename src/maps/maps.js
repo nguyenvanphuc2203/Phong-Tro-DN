@@ -21,6 +21,7 @@ const debounce = require("lodash");
 
 const MapWithASearchBox = compose(
   withProps({
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDxFLq6ww-zE69Agx7KUZysAt67HmR46JU&v=3.exp&libraries=geometry,drawing,places&signed_in=true",
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `700px` }} />,
     mapElement: <div style={{ height: `100%` }} />,
