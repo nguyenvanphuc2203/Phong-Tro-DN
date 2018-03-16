@@ -175,7 +175,7 @@ class Maps extends Component {
     }
   }
   componentWillMount() {
-    fetch('http://localhost:8080/maps')
+    fetch('https://phongtro-nodejs.herokuapp.com/maps')
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson)
