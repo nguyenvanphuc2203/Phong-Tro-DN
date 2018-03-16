@@ -1,0 +1,441 @@
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
+ * Copyright 2013-2017 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+ @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700);
+
+body {
+  overflow-x: hidden;
+  font-family: 'Source Sans Pro', sans-serif;
+  background-color: #89def0;
+}
+
+#wrapper {
+  padding-left: 0;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+  padding-left: 250px;
+}
+
+#sidebar-wrapper {
+  z-index: 1000;
+  position: fixed;
+  left: 250px;
+  width: 0;
+  height: 100%;
+  margin-left: -250px;
+  overflow-y: auto;
+  background: #e4e4e4;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3)
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  width: 250px;
+}
+
+#page-content-wrapper {
+  width: 100%;
+  position: absolute;
+  padding: 15px;
+}
+
+#wrapper.toggled #page-content-wrapper {
+  position: absolute;
+  margin-right: -250px;
+}
+
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+  position: absolute;
+  top: 0;
+  width: 250px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: #e4e4e4;
+}
+
+.sidebar-nav li {
+  text-indent: 20px;
+  line-height: 40px;
+  margin-top: 2px;
+  background-color: #fff
+}
+
+.sidebar-nav li a {
+  display: block;
+  text-decoration: none;
+  color: #999999;
+}
+
+.sidebar-nav li a:hover {
+  text-decoration: none;
+  color: rgb(12, 12, 12);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-nav li a:active, .sidebar-nav li a:focus {
+  text-decoration: none;
+}
+
+.sidebar-nav>.sidebar-brand {
+  height: 65px;
+  font-size: 18px;
+  line-height: 60px;
+  background-image: url('https://i.imgur.com/VlaVoT6.png');
+  background-size: cover;
+  background-repeat: no-repeat
+}
+
+.sidebar-nav>.sidebar-brand a {
+  color: #999999;
+}
+
+.sidebar-nav>.sidebar-brand a:hover {
+  color: #fff;
+  background: none;
+}
+
+@media(min-width:768px) {
+  #wrapper {
+    padding-left: 0;
+  }
+  #wrapper.toggled {
+    padding-left: 250px;
+  }
+  #sidebar-wrapper {
+    width: 0;
+  }
+  #wrapper.toggled #sidebar-wrapper {
+    width: 250px;
+  }
+  #page-content-wrapper {
+    padding: 20px;
+    position: relative;
+  }
+  #wrapper.toggled #page-content-wrapper {
+    position: relative;
+    margin-right: 0;
+  }
+}
+/* MAPS search  */
+.maps{
+  position: relative;
+}
+.searchbox{
+  z-index: 1000;
+  position: absolute;
+  top: 11px;
+  left:10px;
+  background: #fff;
+  border-radius: 3px;
+  box-sizing: border-box;
+  /* width: 392px; */
+  height: 48px;
+  border-bottom: 1px solid transparent;
+  padding: 10px 10px 11px 10px;
+  transition-property: background,box-shadow;
+  transition-duration: 0.3s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3)
+}
+.inputbox{
+    z-index: 1000;
+    position: absolute;
+    top: 11px;
+    left:10px;
+    background: #fff;
+    border-radius: 3px;
+    box-sizing: border-box;
+    /* width: 392px; */
+    height: 48px;
+    border-bottom: 1px solid transparent;
+    padding: 10px 10px 11px 10px;
+    transition-property: background,box-shadow;
+    transition-duration: 0.3s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3)
+  
+}
+
+.infobox{
+  padding: 10px;
+  display: flex;
+  flex-direction: row
+  font-size:1.5em;
+  font-weight:bold
+
+}
+.price{
+  float: right;
+  color:red;
+  margin-left: 110px;
+}
+
+.search_input{
+  color: inherit;
+  height: 30px;
+  vertical-align: top;
+  transition-property: color;
+  transition-duration: 0.3s;
+  margin-left: 10px;
+  border: none;
+}
+
+/* grid view css */
+
+.glyphicon { margin-right:5px; }
+.thumbnail
+{
+    margin-bottom: 20px;
+    padding: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+}
+
+.item.list-group-item
+{
+    float: none;
+    width: 100%;
+    background-color: #fff;
+    margin-bottom: 10px;
+}
+.item.list-group-item:nth-of-type(odd):hover,.item.list-group-item:hover
+{
+    background: #428bca;
+}
+
+.item.list-group-item .list-group-image
+{
+    margin-right: 10px;
+}
+.item.list-group-item .thumbnail
+{
+    margin-bottom: 0px;
+}
+.item.list-group-item .caption
+{
+    padding: 9px 9px 0px 9px;
+}
+.item.list-group-item:nth-of-type(odd)
+{
+    background: #eeeeee;
+}
+
+.item.list-group-item:before, .item.list-group-item:after
+{
+    display: table;
+    content: " ";
+}
+
+.item.list-group-item img
+{
+    float: left;
+}
+.item.list-group-item:after
+{
+    clear: both;
+}
+.list-group-item-text
+{
+    margin: 0 0 11px;
+}
+
+.timtro_li{
+  background-color: red !important;
+  color:#fff !important;
+}
+.timtro_li a{
+  color:#fff !important;
+  border-left: 5px solid #c70300;
+}
+.chothuetro_li{
+  background-color: green !important;
+  color:#fff !important;
+}
+.chothuetro_li a{
+  color:#fff !important;
+  border-left: 3px solid #255d03;
+}
+/* chat  */
+.chatbox{
+  position: relative;
+  height: 100%;
+}
+::-webkit-scrollbar { 
+  display: none; 
+}
+.chatlist{
+  height: 470px;
+  overflow: scroll;
+  padding-bottom: 42px;
+}
+.chatinput{
+  position: absolute;
+  bottom:-10px;
+  background: #fff;
+  border-radius: 3px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 48px;
+  border-bottom: 1px solid transparent;
+  padding: 10px 10px 11px 10px;
+  transition-property: background,box-shadow;
+  transition-duration: 0.3s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3)
+}
+.chat-left{
+  float:left;
+}
+
+.chat-container:before,
+.chat-container:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+.chat-container:after{
+  clear:both;
+}
+
+.chat-right{
+  float:right;
+  margin-right: 5px
+}
+.chat 
+ {
+position: relative;
+max-width: 240px;
+   width:auto;
+   padding: 3px;
+background: #D1D2D4;
+border: #D1D2D4 solid 4px;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 7px;
+margin-left: 15px;
+/*float:left;*/
+display: inline-block;
+/*   display: block;
+*/
+word-wrap: break-word;
+white-space: pre-wrap;
+   margin-top:10px;
+
+ }
+
+.chat:after 
+{
+content: "";
+position: absolute;
+top: 6px;
+left: -7px;
+border-style: solid;
+border-width: 5px 7px 5px 0;
+border-color: transparent #D1D2D4;
+display: block;
+width: 0;
+    height:0;
+  }
+
+.chat:before 
+ {
+content: "";
+position: absolute;
+top: 2px;
+left: -12px;
+border-style: solid;
+border-width: 8px 11px 8px 0;
+border-color: transparent #D1D2D4;
+display: block;
+width: 0;
+z-index: 0;
+    height:0;
+ }
+ /* post --------------------------------------------------------------------- */
+
+ .form-post{
+  position: absolute;
+  left:10px;
+  top:80px;
+  width: 900px;
+ }
+ .input-post{
+    margin-top: 5px;
+    background: #fff;
+    border-radius: 3px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 38px;
+    border-bottom: 1px solid transparent;
+    padding: 10px 10px 11px 10px;
+    transition-property: background,box-shadow;
+    transition-duration: 0.3s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3)
+ }
+ .button-input-post{
+    margin-top: 5px;
+    border-radius: 3px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 38px;
+    padding: 10px 10px 11px 10px;
+    transition-property: background,box-shadow;
+    transition-duration: 0.3s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3)
+ }
+ /* imageUpload ------------------------------------------------- */
+
+ .imageUpload{
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  padding: 1px
+ }
+ .fileInput{
+  margin: 15px;
+  cursor: pointer;
+ } 
+.imgPreview
+ {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  margin: 5px 15px;
+  height: 230px;
+  width: 390px;
+
+ }
+.imgPreview img{
+  width: 100%;
+  height: 100%;
+}
+
+.previewText
+{
+  width: 100%;
+  margin-top: 20px;
+}
+/* login Facebook ------------------------------------- */
+
+.kep-login-facebook{
+  padding:9px !important;
+}
+.login-facebook{
+  position: absolute;
+  z-index: 1000;
+  right: 50px;
+  top: 11px;
+}
+.kep-login-facebook.metro {
+  border-radius: 4px !important;
+  box-shadow: 2px 5px 7px rgba(0, 0, 0, 0.3);
+}

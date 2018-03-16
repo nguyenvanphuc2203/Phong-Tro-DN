@@ -20,13 +20,14 @@ var access_token = (state = "",action) =>{
   if ( action.type === 'ADD_TOKEN') return action.access_token;
   return state;
 }
-var username = (state = "",action) => {
-  if ( action.type === 'ADD_USERNAME') return action.username;
+
+var user = (state = {name:"USERNAME", picture : { data : { url:"https://i.imgur.com/xuNCUjB.png"}}} ,action) => {
+  if ( action.type === 'LOGIN') return action.info;
   return state;
 }
 
 
-var rootReducer = combineReducers({chat,access_token,username})
+var rootReducer = combineReducers({chat,access_token,user})
 
 var store = createStore(rootReducer);
 

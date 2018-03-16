@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import Chat from './chat/home';
-import News from './news/news';
-import Login from './login/login';
+import ChoThue from './chothue/mainChothue';
+import Maps from './maps/main';
 import { BrowserRouter as Router,Route,Link } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import toastr from 'toastr';
 import './App.css';
+import ChatBox from './chatbox/chatbox';
 
 toastr.options = {
   "closeButton": true,
@@ -29,32 +29,35 @@ toastr.options = {
 class App extends Component {
   constructor(props){
     super(props);
+    
   }
+  
   render() {
+    console.log(this.props.user)
     return (
       <Router>
         <Provider store={store}>
-          <div>
-            <div>
-              <nav class="navbar navbar-inverse">
-                <div class="container-fluid">
-                  <div class="navbar-header">
-                    <a class="navbar-brand" href="#">ReactJs/redux</a>
-                  </div>
-                  <ul class="nav navbar-nav">
-                    <li class="active"><Link to="/">FriendList</Link></li>
-                    <li><Link to="/ChatBox">Message</Link></li>
-                  </ul>
-                  <ul class="nav navbar-nav navbar-right">
-                    <li><Link to="/login"><span class="glyphicon glyphicon-log-in"></span> Login</Link></li>
-                  </ul>
-                </div>
-              </nav>
+        <div id="wrapper">
+            <div id="sidebar-wrapper">
+                <ul className="sidebar-nav ">
+                    <li className="sidebar-brand">
+                    </li>
+                    <li className="timtro_li">
+                       <Link to="/"><i className="far fa-handshake"></i> TÌM TRỌ NGAY</Link>
+                    </li>
+                    <li className="chothuetro_li">
+                        <a><Link to="/ChoThue"><i className="fas fa-bullhorn"></i> ĐĂNG TIN CHO THUÊ</Link></a>
+                    </li>
+                    <li>
+                       <a onClick={()=>{toastr.error('Copyright Phuc nguyen')}}> ABOUT</a>
+                    </li>
+                    <ChatBox />
+                </ul>
             </div>
-
-            <Route exact path="/" component={News}/>
-            <Route exact path="/ChatBox" component={Chat}/>
-            <Route exact path="/login" component={Login}/>
+            <div className="content">
+              <Route exact path="/" component={Maps}/>
+              <Route exact path="/ChoThue" component={ChoThue}/>
+            </div>
           </div>
         </Provider>
       </Router>
