@@ -17,7 +17,7 @@ class Main extends Component {
   }
   toggle(){
     $("#wrapper").toggleClass("toggled");
-   }
+  }
 
   render() {
     return (

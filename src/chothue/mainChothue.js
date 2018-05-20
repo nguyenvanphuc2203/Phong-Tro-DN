@@ -5,15 +5,15 @@ import toastr from 'toastr';
 import $ from "jquery";
 import axios from 'axios';
 import Maps from './mapsChothue';
-import ImageUpload from './imageUpload';
-
+import LoginFacebook from '../login/loginFacebook';
 class Main extends Component {
   constructor(props){
     super(props);
     this.state = {
-      isOpen: false
+      isOpen: false,
+
     }
-    toastr.warning('Điền số nhà nếu có!','MẸO !');
+    toastr.success('Drag To Pick Location!','MẸO !');
   }
   toggle(){
     $("#wrapper").toggleClass("toggled");
@@ -29,7 +29,12 @@ class Main extends Component {
             <i class="fas fa-2x fa-bars"></i>
           </a>
         </div>
-        <Maps/>
+        {(this.props.user.name === 'NO_USERNAME') ? 
+          <div className="container">
+            <LoginFacebook/>
+          </div> : 
+          <Maps/>
+        }
       </div>
     );
   }

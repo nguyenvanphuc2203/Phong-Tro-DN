@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import toastr from 'toastr';
 import FacebookLogin from 'react-facebook-login';
+import { SERVER_URL } from '../config';
 
 class loginFacebook extends Component{
     constructor(props){
@@ -17,6 +18,17 @@ class loginFacebook extends Component{
         this.setState({isLogin:true})
         toastr.success('Đăng nhập '+response.name,'SUCCESS' )
         console.log('Cập nhật thông tin '+response.name+' vào store thành công!')
+        // add database
+        fetch(SERVER_URL+'/adduser', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user: response,
+        }),
+      });
     }
     logout(){
         var { dispatch } = this.props;
@@ -27,11 +39,13 @@ class loginFacebook extends Component{
     render(){
         if ( this.state.isLogin )
         return(
-            
-            <button onClick={this.logout.bind(this)} class="btn btn-success">
-                <img src={this.props.user.picture.data.url} width="35px" />
-                 ĐĂNG XUẤT
-            </button>
+            <div>
+                <button onClick={this.logout.bind(this)} class="btn btn-success">
+                    <img src={this.props.user.picture.data.url} width="35px" />
+                    ĐĂNG XUẤT
+                    
+                </button>
+            </div>
         )
         else
         return (

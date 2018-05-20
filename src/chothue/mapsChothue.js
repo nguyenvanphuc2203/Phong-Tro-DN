@@ -5,57 +5,123 @@ import toastr from 'toastr';
 import $ from "jquery";
 import axios from 'axios';
 import WOW from 'wowjs';
-import FromChoThue from './formChothue';
+import FormChoThue from './formChothue';
+import { SERVER_URL } from '../config';
 
-const { compose, withProps, lifecycle } = require("recompose");
+
+const _ = require("lodash");
+const { compose, withProps,withStateHandlers, lifecycle } = require("recompose");
 const {
   withScriptjs,
+  withGoogleMap,
+  GoogleMap,
+  Marker,
+  InfoWindow
 } = require("react-google-maps");
-const { StandaloneSearchBox } = require("react-google-maps/lib/components/places/StandaloneSearchBox");
+const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
+const google = window.google;
+const debounce = require("lodash");
 
-const PlacesWithStandaloneSearchBox = compose(
+const MapWithASearchBox = compose(
   withProps({
-    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDxFLq6ww-zE69Agx7KUZysAt67HmR46JU&v=3.exp&libraries=geometry,drawing,places",
-    loadingElement: <div style={{ height: '100%' }} />,
-    containerElement: <div style={{ height: '400px' }} />,
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDxFLq6ww-zE69Agx7KUZysAt67HmR46JU&v=3.exp&libraries=geometry,drawing,places&signed_in=true",
+    loadingElement: <div style={{ height: `100%` }} />,
+    containerElement: <div style={{ height: `700px` }} />,
+    mapElement: <div style={{ height: `100%` }} />,
   }),
   lifecycle({
     componentWillMount() {
       const refs = {}
-
+      console.log(this.props.nhatro)
       this.setState({
-        places: [],
+        bounds: null,
+        center: {
+          lat: 15.9710189, lng: 108.2293462
+        },
+        markers: [],
+        onMapMounted: ref => {
+          refs.map = ref;
+        },
+        onBoundsChanged: debounce(
+          () => {
+          this.setState({
+            bounds: refs.map.getBounds(),
+            center: refs.map.getCenter()
+          })
+          let { onBoundsChange } = this.props
+            if (onBoundsChange) {
+              onBoundsChange(refs.map)
+            }
+          },
+            100,
+            { maxWait: 500 }
+          ),
         onSearchBoxMounted: ref => {
           refs.searchBox = ref;
         },
         onPlacesChanged: () => {
           const places = refs.searchBox.getPlaces();
-          toastr.success('lấy vị trí thành công!?')
-          this.setState({
-            places,
+          const bounds = new google.maps.LatLngBounds();
+
+          places.forEach(place => {
+            if (place.geometry.viewport) {
+              bounds.union(place.geometry.viewport)
+            } else {
+              bounds.extend(place.geometry.location)
+            }
           });
+          const nextMarkers = places.map(place => ({
+            position: place.geometry.location,
+          }));
+          const nextCenter = _.get(nextMarkers, '0.position', this.state.center);
+
+          this.setState({
+            center: nextCenter,
+            markers: nextMarkers,
+          });
+          // refs.map.fitBounds(bounds);
         },
       })
     },
   }),
-  withScriptjs  
+  /* icon trọ  */
+  withStateHandlers(() => ({
+    isOpen: false,
+    showInfo : '0'
+  }), {
+    onToggleOpen: ({ isOpen }) => () => ({
+      isOpen: !isOpen,
+    }),
+    showInfo: ({ showInfo,isOpen }) => (a) => ({
+      isOpen: !isOpen,
+      showInfoIndex: a
+    })
+  }),
+  withScriptjs,
+  withGoogleMap
 )(props =>
-  <div data-standalone-searchbox="">
-    <StandaloneSearchBox
+  <GoogleMap
+    ref={props.onMapMounted}
+    defaultZoom={15}
+    center={props.center}
+    onBoundsChanged={props.onBoundsChanged}
+  >
+    <SearchBox
       ref={props.onSearchBoxMounted}
       bounds={props.bounds}
+      controlPosition={google.maps.ControlPosition.TOP_LEFT}
       onPlacesChanged={props.onPlacesChanged}
     >
       <input
         type="text"
-        placeholder="Trọ của bạn ở đâu? gõ để xác định vị trí "
+        placeholder="Nhập Tên Phường/Quận?"
         style={{
           boxSizing: `border-box`,
           border: `1px solid transparent`,
-          width: `340px`,
+          width: `240px`,
           height: `48px`,
           marginTop: `11px`,
-          marginLeft: `60px`,
+          marginLeft: `-50px`,
           padding: `0 10px`,
           zIndex:'1000',
           borderRadius: `3px`,
@@ -65,18 +131,31 @@ const PlacesWithStandaloneSearchBox = compose(
           textOverflow: `ellipses`,
         }}
       />
-    </StandaloneSearchBox>
-    <ol>
-      {props.places.map(({ place_id, formatted_address, geometry: { location } }) =>
-      <div key={place_id}>
-          <FromChoThue formatted_address={formatted_address} location={location}/>
-      </div>
-        
-      )}
-    </ol>
-  </div>
+    </SearchBox>
+    {props.markers.map((marker, index) =>
+      <Marker
+        draggable
+        onDragEnd={(e) => {
+          console.log(e);
+          fetch('http://maps.googleapis.com/maps/api/geocode/json?latlng='+e.latLng.lat()+','+e.latLng.lng()+'&sensor=false')
+          .then((response) => response.json())
+          .then((responseJson) => {
+            console.log(responseJson)
+            $('#address').val(responseJson.results[0].formatted_address)
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+          $('#lat_pick').val(e.latLng.lat());
+          $('#lng_pick').val(e.latLng.lng());
+          $('.collapse_maps').click()
+        }}
+        options={{icon: 'https://i.imgur.com/1LPtwiF.png'}}
+        key={index} 
+        position={marker.position} />
+    )}
+  </GoogleMap>
 );
-
 
 class Maps extends Component {
   constructor(props){
@@ -84,18 +163,41 @@ class Maps extends Component {
     const wow = new WOW.WOW();
     wow.init();
     this.state = {
-     
+      
     }
+  }
+  componentWillMount() {
+    fetch(SERVER_URL+'/maps')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson)
+        this.setState({ nhatro: responseJson }) ;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
   render() {
     return (
-
-      <div class="wow slideInLeft">
-          <PlacesWithStandaloneSearchBox 
-            loadingElement={<div style={{ height: `100%` }} />}
-            containerElement={<div style={{ height: `390px` }} />}
-            mapElement={<div style={{ height: `100%` }} />}
-          />
+      <div className="wow slideInLeft">
+        <div class="row">
+          <div class="col-md-12">
+          <button class="btn btn-success collapse_maps" id="toggle_maps" data-toggle="collapse" data-target="#maps_pick">Chọn Vị Trí</button>
+            <div id="maps_pick" class="collapse">
+              <MapWithASearchBox 
+                loadingElement={<div style={{ height: `100%` }} />}
+                containerElement={<div style={{ height: `390px` }} />}
+                mapElement={<div style={{ height: `100%` }} />}
+                nhatro={this.state.nhatro} />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <FormChoThue />
+          </div>
+        </div>
+       
       </div>
     );
   }

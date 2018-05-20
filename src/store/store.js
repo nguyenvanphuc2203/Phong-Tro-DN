@@ -21,13 +21,17 @@ var access_token = (state = "",action) =>{
   return state;
 }
 
-var user = (state = {name:"USERNAME", picture : { data : { url:"https://i.imgur.com/xuNCUjB.png"}}} ,action) => {
+var user = ( state = { name:"NO_USERNAME", picture : { data : { url:"https://i.imgur.com/xuNCUjB.png"}}} ,action) => {
   if ( action.type === 'LOGIN') return action.info;
   return state;
 }
 
+var isLogin = ( state = false ,action) => {
+  if ( action.type === 'IS_LOGIN') return state = true;
+  return state;
+}
 
-var rootReducer = combineReducers({chat,access_token,user})
+var rootReducer = combineReducers({chat,access_token,user,isLogin})
 
 var store = createStore(rootReducer);
 

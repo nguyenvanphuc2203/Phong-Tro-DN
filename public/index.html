@@ -20,14 +20,23 @@
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
-    
+        <div class="overlay">
+            <div class="loading">Loading&#8230;</div>
+        </div>
     <div id="root"></div>
-    
     <script src="lib/jquery/jquery.min.js"></script>
     <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function() {
             $("#wrapper").toggleClass("toggled");
+            setTimeout(()=>{
+                $('.overlay').html('')
+            },1000)
+            $(".slide-toggle").click(function(){
+                $(".box").animate({
+                width: "toggle"
+                });
+            });
         });
         
     </script>

@@ -5,6 +5,7 @@ import toastr from 'toastr';
 import $ from "jquery";
 import axios from 'axios';
 import WOW from 'wowjs';
+import { SERVER_URL } from '../config';
 
 const _ = require("lodash");
 const { compose, withProps,withStateHandlers, lifecycle } = require("recompose");
@@ -55,6 +56,9 @@ const MapWithASearchBox = compose(
           ),
         onSearchBoxMounted: ref => {
           refs.searchBox = ref;
+        },
+        sendComment:()=>{
+          alert('ok')
         },
         onPlacesChanged: () => {
           const places = refs.searchBox.getPlaces();
@@ -110,6 +114,7 @@ const MapWithASearchBox = compose(
       onPlacesChanged={props.onPlacesChanged}
     >
       <input
+        id="input_search"
         type="text"
         placeholder="Bạn muốn tìm trọ ở đâu?"
         style={{
@@ -131,8 +136,8 @@ const MapWithASearchBox = compose(
     </SearchBox>
     {console.log(props.markers)}
     {props.markers.map((marker, index) =>
-      <Marker 
-        options={{icon: 'https://i.imgur.com/TstBLfP.png'}}
+      <Marker
+        options={{icon: 'https://i.imgur.com/1LPtwiF.png'}}
         key={index} 
         position={marker.position} />
     )}
@@ -146,16 +151,56 @@ const MapWithASearchBox = compose(
           { (props.showInfoIndex === index ) && 
           <InfoWindow  onCloseClick={props.onToggleOpen}>
             <div onClick={()=>{}} class="wow slideInLeft">
-              <img src="https://i.imgur.com/7IgBxnH.jpg" width="300px" />
+              <div className="nhatro_image">
+                <img src="https://i.imgur.com/7IgBxnH.jpg" width="300px" />
+                <div className="nhatro_phone"><i class="fas fa-mobile-alt"></i> {nhatro.phone}</div>
+                <div className="nhatro_status">{ nhatro.status ? "" : " Đã Cho Thuê "}</div>
+              </div>
               <div className="infobox">
-                <div>{nhatro.title}</div>
+                <div >{nhatro.title}</div>
                 <div className="price">{nhatro.price}</div>
               </div>
               <ul className="list-group">
-                <li className="list-group-item">Gác Lửng</li>
-                <li className="list-group-item">Phòng Vệ Sinh Riêng</li>
-                <li className="list-group-item">Giờ Giấc Tự Do</li>
+                {nhatro.service.map(service => <li className="list-group-item">{service.text}</li> )}
               </ul>
+              <div className="comment" data-toggle="collapse" data-target="#comment">
+                <i class="far fa-comments" ></i> Comment
+              </div>
+              <div id="comment" class="collapse">
+                <div>
+                  <input id="comment_text" onKeyPress={
+                    (ev)=>{
+                      if (ev.key === 'Enter') {
+                        // add database
+                        let comment_text = $('#comment_text').val();
+                        $('#comment_text').val('');
+                        toastr.success('Cảm ơn bạn đã để lại đánh giá!')
+                        fetch('http://localhost:8080/addcomment', {
+                          method: 'POST',
+                          headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({
+                            id: nhatro._id,
+                            user_image: props.user_image,
+                            comment: comment_text
+                        }),
+                      });
+
+                      }
+                    }
+                  } type="text" className="input-comment" size="35" placeholder="Nhập Đánh giá Của Bạn" />
+                  <div className="box_comment">
+                    {nhatro.comments.map(comment => 
+                      <div className="comment-item">
+                        <img className="image-user-comment" src={comment.user_image} width="300px" />
+                        <p> {comment.comment}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </InfoWindow>}
         </Marker>
@@ -169,13 +214,11 @@ class Maps extends Component {
     const wow = new WOW.WOW();
     wow.init();
     this.state = {
-      nhatro : [
-        { lat: 15.9910177, lng: 108.1443488 , title :' Nhà cho thuê' , price : '1.500.000' }
-      ]
+      nhatro : []
     }
   }
   componentWillMount() {
-    fetch('https://phongtro-nodejs.herokuapp.com/maps')
+    fetch(SERVER_URL+'/maps')
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson)
@@ -189,10 +232,12 @@ class Maps extends Component {
     return (
       <div className="wow slideInLeft">
         <MapWithASearchBox 
-        loadingElement={<div style={{ height: `100%` }} />}
-        containerElement={<div style={{ height: `390px` }} />}
-        mapElement={<div style={{ height: `100%` }} />}
-        nhatro={this.state.nhatro} />
+          loadingElement={<div style={{ height: `100%` }} />}
+          containerElement={<div style={{ height: `390px` }} />}
+          mapElement={<div style={{ height: `100%` }} />}
+          nhatro={this.state.nhatro}
+          user_image={this.props.user.picture.data.url} />
+            
       </div>
     );
   }
